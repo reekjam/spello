@@ -27,21 +27,12 @@
 </template>
 
 <script>
+  var data = require('./data/index.js')
+
   export default {
     data () {
       return {
-        wordBank: [
-          'antediluvian',
-          'xanthosis',
-          'chiaroscurist',
-          'logorrhea',
-          'succedaneum',
-          'pococurante',
-          'autochthonous',
-          'appoggiatura',
-          'ursprache',
-          'laodicean'
-        ],
+        wordBank: data.wordBank,
         index: 0,
         entry: '',
         wrong: false,
@@ -71,12 +62,6 @@
         this.wrong = false
         this.strikes = 0
         this.clearInput()
-      }
-    },
-    components: {
-      'game-over': {
-        props: ['clickHandler'],
-        template: "<h1 v-on:click='clickHandler'>Game over. Try again?</h1>"
       }
     }
   }
@@ -113,6 +98,10 @@
 
   #app {
     text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   #word {
@@ -124,14 +113,6 @@
     height: 3em;
     color: crimson;
     overflow: hidden;
-  }
-
-  .game-over {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 
   .strikes {
