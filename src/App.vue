@@ -8,7 +8,8 @@
         <h2>Type the word below:</h2>
 
         <span id='word'>
-          {{ wordBank[index % wordBank.length] }}
+          {{ word }}
+          <!-- {{ wordBank[index % wordBank.length] }} -->
         </span>
 
         <div class='error'>
@@ -32,7 +33,7 @@
   export default {
     data () {
       return {
-        wordBank: data.wordBank,
+        word: 'ready',
         index: 0,
         entry: '',
         wrong: false,
@@ -45,10 +46,13 @@
       }
     },
     methods: {
+      getNewWord () {
+        this.word = data.getRandomWord()
+      },
       compareWords () {
-        if (this.entry === this.wordBank[this.index % this.wordBank.length]) {
-          this.index++
+        if (this.entry === this.word) {
           this.wrong = false
+          this.getNewWord()
         } else {
           this.wrong = true
           this.strikes++
