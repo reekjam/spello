@@ -5,14 +5,12 @@
     </div>
     <div v-else>
 
-      <button v-on:click='speak'>Repeat</button>
-
       <form v-on:submit.prevent='compareWords'>
-        <h2>Type the word below:</h2>
+        <h2>Begin spelling:</h2>
 
-        <span id='word' class='reveal'>
-          {{ word }}
-        </span>
+        <div class='word-container'v-on:click.prevent='speak'>
+          <p id='word' class='reveal'>{{ word }}</p>
+        </div>
 
         <div class='error'>
           <p v-if='wrong'>Wrong.</p>
@@ -33,10 +31,8 @@
   import Speech from 'speak-tts'
   import data from './data/index.js'
 
-  Speech.init({
-    lang: 'en-US',
-    pitch: '1.1'
-  })
+  const speechConfig = { lang: 'en-US', pitch: '1.1' }
+  Speech.init(speechConfig)
 
   export default {
     data () {
@@ -79,14 +75,13 @@
       },
       resetReveal () {
         let wordSpan = document.querySelector('#word')
-        let wordSpanClone = document.createElement('span')
+        let wordSpanClone = document.createElement('p')
         wordSpanClone.id = 'word'
         wordSpanClone.className = 'reveal'
         wordSpanClone.innerHTML = this.word
         wordSpan.parentNode.replaceChild(wordSpanClone, wordSpan)
       },
       speak () {
-        console.log('speaking')
         Speech.speak({text: this.word})
       }
     }
@@ -132,6 +127,12 @@
 
   #word {
     font-size: 2.5em;
+    margin-bottom: 0;
+  }
+
+  .word-container {
+    border-bottom: 1px solid white;
+    cursor: pointer;
   }
 
   .reveal {

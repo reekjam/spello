@@ -3,11 +3,11 @@ let VueResource = require('vue-resource')
 Vue.use(VueResource)
 
 module.exports = {
-  word: '',
+  word: 'set',
   getRandomWord () {
     Vue.http.jsonp('http://randomword.setgetgo.com/get.php').then(response => {
       this.word = response.data.Word
     })
-    return this.word || 'set'
+    return this.word
   }
 }
