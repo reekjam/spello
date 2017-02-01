@@ -8,8 +8,8 @@
       <form v-on:submit.prevent='compareWords'>
         <h2>Begin spelling:</h2>
 
-        <div class='word-container'v-on:click.prevent='speak'>
-          <p id='word' class='reveal'>{{ word }}</p>
+        <div class='word-container' v-on:click.prevent='speak'>
+          <p id='word'>{{ word }}</p>
         </div>
 
         <div class='error'>
