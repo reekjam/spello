@@ -4,12 +4,14 @@
       <game-over v-bind:click-handler='restart' class='game-over'/>
     </div>
     <div v-else>
+
+      <button v-on:click='speak'>Repeat</button>
+
       <form v-on:submit.prevent='compareWords'>
         <h2>Type the word below:</h2>
 
-        <span id='word'>
+        <span id='word' class='reveal'>
           {{ word }}
-          <!-- {{ wordBank[index % wordBank.length] }} -->
         </span>
 
         <div class='error'>
@@ -28,7 +30,13 @@
 </template>
 
 <script>
-  var data = require('./data/index.js')
+  import Speech from 'speak-tts'
+  import data from './data/index.js'
+
+  Speech.init({
+    lang: 'en-US',
+    pitch: '1.1'
+  })
 
   export default {
     data () {
@@ -48,6 +56,8 @@
     methods: {
       getNewWord () {
         this.word = data.getRandomWord()
+        this.resetReveal()
+        this.speak()
       },
       compareWords () {
         if (this.entry === this.word) {
@@ -66,6 +76,18 @@
         this.wrong = false
         this.strikes = 0
         this.clearInput()
+      },
+      resetReveal () {
+        let wordSpan = document.querySelector('#word')
+        let wordSpanClone = document.createElement('span')
+        wordSpanClone.id = 'word'
+        wordSpanClone.className = 'reveal'
+        wordSpanClone.innerHTML = this.word
+        wordSpan.parentNode.replaceChild(wordSpanClone, wordSpan)
+      },
+      speak () {
+        console.log('speaking')
+        Speech.speak({text: this.word})
       }
     }
   }
@@ -109,8 +131,11 @@
   }
 
   #word {
-    animation: blinker 1s linear infinite;
     font-size: 2.5em;
+  }
+
+  .reveal {
+    animation: blinker 10s linear;
   }
 
   .error {
@@ -125,6 +150,10 @@
   }
 
   @keyframes blinker {
-    50% {opacity: .5;}
+    0% {opacity: 0;}
+    40% {opacity: .1;}
+    70% {opacity: .7;}
+    100% {opacity: 1;}
   }
+
 </style>
