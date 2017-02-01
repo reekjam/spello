@@ -1,12 +1,12 @@
 <template>
   <div id='app'>
     <div v-if='gameOver'>
-      <game-over v-bind:click-handler='restart' class='game-over'/>
+      <game-over v-bind:click-handler='newGame' class='game-over'/>
     </div>
     <div v-else>
 
       <form v-on:submit.prevent='compareWords'>
-        <h2>Begin spelling:</h2>
+        <h2>{{ setInstruction }}</h2>
 
         <div class='word-container' v-on:click.prevent='speak'>
           <p id='word'>{{ word }}</p>
@@ -40,6 +40,7 @@
         word: 'ready',
         index: 0,
         entry: '',
+        playing: false,
         wrong: false,
         strikes: 0
       }
@@ -47,6 +48,13 @@
     computed: {
       gameOver () {
         return this.strikes >= 3
+      },
+      setInstruction () {
+        if (this.playing) {
+          return 'Spell, spell, spell.'
+        } else {
+          return 'Type "ready" to begin.'
+        }
       }
     },
     methods: {
@@ -57,6 +65,7 @@
       },
       compareWords () {
         if (this.entry === this.word) {
+          this.playing = true
           this.wrong = false
           this.getNewWord()
         } else {
@@ -68,7 +77,9 @@
       clearInput () {
         this.entry = ''
       },
-      restart () {
+      newGame () {
+        this.word = 'ready'
+        this.playing = false
         this.wrong = false
         this.strikes = 0
         this.clearInput()
