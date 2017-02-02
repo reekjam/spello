@@ -1,5 +1,6 @@
-let Vue = require('vue')
-let Vuex = require('vuex')
+import Vue from 'vue'
+import Vuex from 'vuex'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -10,5 +11,17 @@ export default new Vuex.Store({
     playing: false,
     wrong: false,
     strikes: 0
+  },
+  mutations: {
+    newGame (state) {
+      state.word = 'ready'
+      state.playing = false
+      state.wrong = false
+      state.strikes = 0
+      state.clearInput()
+    },
+    updateEntry (state, entry) {
+      state.entry = entry
+    }
   }
 })

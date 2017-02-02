@@ -16,7 +16,7 @@
           <p v-if='wrong'>Wrong.</p>
         </div>
 
-        <input type="text" v-model='entry'/>
+        <input type="text" @input='updateEntry'/>
         <button>Enter</button>
 
         <div class='strikes error'>
@@ -54,32 +54,30 @@
       }
     }),
     methods: {
+      updateEntry (e) {
+        this.$store.commit('updateEntry', e.target.value)
+      },
       getNewWord () {
-        this.word = data.getRandomWord()
+        this.$store.state.word = data.getRandomWord()
         this.resetReveal()
         this.speak()
       },
       compareWords () {
-        console.log('in compareWords')
-        if (this.entry === this.word) {
-          this.playing = true
-          this.wrong = false
+        if (this.$store.state.entry === this.$store.state.word) {
+          this.$store.state.playing = true
+          this.$store.state.wrong = false
           this.getNewWord()
         } else {
-          this.wrong = true
-          this.strikes++
+          this.$store.state.wrong = true
+          this.$store.state.strikes++
         }
         this.clearInput()
       },
       clearInput () {
-        this.entry = ''
+        document.getElementsByTagName('input')[0].value = ''
       },
       newGame () {
-        this.word = 'ready'
-        this.playing = false
-        this.wrong = false
-        this.strikes = 0
-        this.clearInput()
+        this.$store.commit('newGame')
       },
       resetReveal () {
         let wordSpan = document.querySelector('#word')
