@@ -1,10 +1,11 @@
 <template>
   <div id='app'>
+
     <div v-if='gameOver'>
       <game-over v-bind:click-handler='newGame' class='game-over'/>
     </div>
-    <div v-else>
 
+    <div v-else>
       <form v-on:submit.prevent='compareWords'>
         <h2>{{ setInstruction }}</h2>
 
@@ -58,7 +59,7 @@
         this.$store.commit('updateEntry', e.target.value)
       },
       getNewWord () {
-        this.$store.state.word = data.getRandomWord()
+        data.getRandomWord()
         this.resetReveal()
         this.speak()
       },
@@ -88,7 +89,7 @@
         wordSpan.parentNode.replaceChild(wordSpanClone, wordSpan)
       },
       speak () {
-        Speech.speak({text: this.word})
+        Speech.speak({text: this.$store.state.word})
       }
     }
   }
@@ -101,6 +102,10 @@
     font-family: 'Noto Serif';
     background: skyblue;
     color: white;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
 
   input, button {
@@ -125,10 +130,10 @@
 
   #app {
     text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
   }
 
   #word {
