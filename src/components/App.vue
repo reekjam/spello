@@ -25,12 +25,12 @@
         </div>
       </form>
     </div>
+
   </div>
 </template>
 
 <script>
   import Speech from 'speak-tts'
-  import data from '../data/index.js'
   import {mapState} from 'vuex'
 
   const speechConfig = { lang: 'en-US', pitch: '1.1' }
@@ -59,8 +59,9 @@
         this.$store.commit('updateEntry', e.target.value)
       },
       getNewWord () {
-        data.getRandomWord()
-        this.resetReveal()
+        this.$store.commit('getRandomWord')
+        console.log('in getNewWord', this.word)
+        this.displayNewWord()
         this.speak()
       },
       compareWords () {
@@ -80,7 +81,7 @@
       newGame () {
         this.$store.commit('newGame')
       },
-      resetReveal () {
+      displayNewWord () {
         let wordSpan = document.querySelector('#word')
         let wordSpanClone = document.createElement('p')
         wordSpanClone.id = 'word'

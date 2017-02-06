@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueResource from 'vue-resource'
 
 Vue.use(Vuex)
+Vue.use(VueResource)
 
 export default new Vuex.Store({
   state: {
@@ -22,6 +24,12 @@ export default new Vuex.Store({
     },
     updateEntry (state, entry) {
       state.entry = entry
+    },
+    getRandomWord (state) {
+      Vue.http.jsonp('http://randomword.setgetgo.com/get.php').then(response => {
+        state.word = response.data.Word
+        console.log('in getRandomWord', state.word)
+      })
     }
   }
 })
