@@ -54,10 +54,9 @@
         this.$store.commit('updateEntry', e.target.value)
       },
       getNewWord () {
-        this.getRandomWord()
-        console.log('in getNewWord', this.$store.state.word)
-        this.displayNewWord()
-        this.speak()
+        this.$store.dispatch('getRandomWord').then(() =>
+          this.speak()
+        )
       },
       compareWords () {
         if (this.$store.state.entry === this.$store.state.word) {

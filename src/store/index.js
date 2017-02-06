@@ -29,10 +29,14 @@ export default new Vuex.Store({
     updateEntry (state, entry) {
       state.entry = entry
     },
-    getRandomWord (state) {
-      Vue.http.jsonp('http://randomword.setgetgo.com/get.php').then(response => {
-        state.word = response.data.Word
-        console.log('in getRandomWord', state.word)
+    updateWord (state, newWord) {
+      state.word = newWord
+    }
+  },
+  actions: {
+    getRandomWord (context) {
+      return Vue.http.jsonp('http://randomword.setgetgo.com/get.php').then(response => {
+        context.commit('updateWord', response.data.Word)
       })
     }
   }
