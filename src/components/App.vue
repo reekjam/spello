@@ -31,7 +31,7 @@
 
 <script>
   import Speech from 'speak-tts'
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState, mapGetters, mapMutations } from 'vuex'
 
   const speechConfig = { lang: 'en-US', pitch: '1.1' }
   Speech.init(speechConfig)
@@ -42,6 +42,7 @@
       ...mapGetters(['gameOver'])
     },
     methods: {
+      ...mapMutations(['newGame', 'getRandomWord']),
       setInstruction () {
         if (this.playing) {
           return 'Spell, spell, spell.'
@@ -53,7 +54,7 @@
         this.$store.commit('updateEntry', e.target.value)
       },
       getNewWord () {
-        this.$store.commit('getRandomWord')
+        this.getRandomWord()
         console.log('in getNewWord', this.$store.state.word)
         this.displayNewWord()
         this.speak()
@@ -71,9 +72,6 @@
       },
       clearInput () {
         document.getElementsByTagName('input')[0].value = ''
-      },
-      newGame () {
-        store.commit('newGame')
       },
       displayNewWord () {
         let wordSpan = document.querySelector('#word')
