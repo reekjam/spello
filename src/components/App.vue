@@ -7,7 +7,7 @@
 
     <div v-else>
       <form v-on:submit.prevent='compareWords'>
-        <h2>{{ setInstruction }}</h2>
+        <h2>{{ setInstruction() }}</h2>
 
         <div class='word-container' v-on:click.prevent='speak'>
           <p id='word'>{{ word }}</p>
@@ -31,36 +31,30 @@
 
 <script>
   import Speech from 'speak-tts'
-  import {mapState} from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
 
   const speechConfig = { lang: 'en-US', pitch: '1.1' }
   Speech.init(speechConfig)
 
   export default {
-    computed: mapState({
-      word: state => state.word,
-      entry: state => state.entry,
-      playing: state => state.playing,
-      wrong: state => state.wrong,
-      strikes: state => state.strikes,
-      gameOver () {
-        return this.strikes >= 3
-      },
+    computed: {
+      ...mapState(['word', 'entry', 'playing', 'wrong', 'strikes']),
+      ...mapGetters(['gameOver'])
+    },
+    methods: {
       setInstruction () {
         if (this.playing) {
           return 'Spell, spell, spell.'
         } else {
           return 'Type "ready" to begin.'
         }
-      }
-    }),
-    methods: {
+      },
       updateEntry (e) {
         this.$store.commit('updateEntry', e.target.value)
       },
       getNewWord () {
         this.$store.commit('getRandomWord')
-        console.log('in getNewWord', this.word)
+        console.log('in getNewWord', this.$store.state.word)
         this.displayNewWord()
         this.speak()
       },
@@ -79,7 +73,7 @@
         document.getElementsByTagName('input')[0].value = ''
       },
       newGame () {
-        this.$store.commit('newGame')
+        store.commit('newGame')
       },
       displayNewWord () {
         let wordSpan = document.querySelector('#word')
