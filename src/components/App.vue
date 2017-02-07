@@ -44,7 +44,7 @@
       ...mapGetters(['gameOver'])
     },
     methods: {
-      ...mapMutations(['newGame', 'getRandomWord']),
+      ...mapMutations(['newGame', 'getRandomWord', 'correctEntry', 'incorrectEntry']),
       updateEntry (e) {
         this.$store.commit('updateEntry', e.target.value)
       },
@@ -55,12 +55,10 @@
       },
       compareWords () {
         if (this.$store.state.entry === this.$store.state.word) {
-          this.$store.state.playing = true
-          this.$store.state.wrong = false
+          this.correctEntry()
           this.getNewWord()
         } else {
-          this.$store.state.wrong = true
-          this.$store.state.strikes++
+          this.incorrectEntry()
         }
         this.clearInput()
       },

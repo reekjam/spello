@@ -26,6 +26,14 @@ export default new Vuex.Store({
       state.wrong = false
       state.strikes = 0
     },
+    correctEntry (state) {
+      state.playing = true
+      state.wrong = false
+    },
+    incorrectEntry (state) {
+      state.wrong = true
+      state.strikes++
+    },
     updateEntry (state, entry) {
       state.entry = entry
     },
