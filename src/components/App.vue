@@ -10,7 +10,9 @@
         <h2>{{ setInstruction() }}</h2>
 
         <div class='word-container' v-on:click.prevent='speak'>
-          <p id='word'>{{ word }}</p>
+          <transition name='reveal' mode='out-in'>
+            <p id='word' :key='word'>{{ word }}</p>
+          </transition>
         </div>
 
         <div class='error'>
@@ -72,14 +74,6 @@
       clearInput () {
         document.getElementsByTagName('input')[0].value = ''
       },
-      displayNewWord () {
-        let wordSpan = document.querySelector('#word')
-        let wordSpanClone = document.createElement('p')
-        wordSpanClone.id = 'word'
-        wordSpanClone.className = 'reveal'
-        wordSpanClone.innerHTML = this.word
-        wordSpan.parentNode.replaceChild(wordSpanClone, wordSpan)
-      },
       speak () {
         Speech.speak({text: this.$store.state.word})
       }
@@ -138,8 +132,22 @@
     cursor: pointer;
   }
 
-  .reveal {
-    animation: blinker 10s linear;
+  .reveal-enter-active {
+    opacity: 0;
+    transition: opacity 40s;
+  }
+
+  .reveal-leave-active {
+    opacity: .1;
+    transition: opacity .2s;
+  }
+
+  .reveal-enter-to {
+    opacity: 1;
+  }
+
+  .reveal-leave-to {
+    opacity: 0;
   }
 
   .error {
