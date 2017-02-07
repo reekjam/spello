@@ -9,11 +9,7 @@
       <form v-on:submit.prevent='compareWords'>
         <instructions :playing='playing'/>
 
-        <div class='word-container' v-on:click.prevent='speak'>
-          <transition name='reveal' mode='out-in'>
-            <p id='word' :key='word'>{{ word }}</p>
-          </transition>
-        </div>
+        <word :word='word'/>
 
         <div class='error'>
           <p v-if='wrong'>Wrong.</p>
@@ -30,11 +26,7 @@
 </template>
 
 <script>
-  import Speech from 'speak-tts'
   import { mapState, mapGetters, mapMutations } from 'vuex'
-
-  const speechConfig = { lang: 'en-US', pitch: '1.1' }
-  Speech.init(speechConfig)
 
   export default {
     computed: {
@@ -62,9 +54,6 @@
       },
       clearInput () {
         document.getElementsByTagName('input')[0].value = ''
-      },
-      speak () {
-        Speech.speak({text: this.$store.state.word})
       }
     }
   }
@@ -109,41 +98,6 @@
     flex-direction: row;
     align-items: center;
     height: 100%;
-  }
-
-  #word {
-    font-size: 2.5em;
-    margin-bottom: 0;
-  }
-
-  .word-container {
-    border-bottom: 1px solid white;
-    cursor: pointer;
-  }
-
-  .reveal-enter-active {
-    opacity: 0;
-    transition: opacity 40s;
-  }
-
-  .reveal-leave-active {
-    opacity: .1;
-    transition: opacity .2s;
-  }
-
-  .reveal-enter-to {
-    opacity: 1;
-  }
-
-  .reveal-leave-to {
-    opacity: 0;
-  }
-
-  @keyframes blinker {
-    0% {opacity: 0;}
-    40% {opacity: .1;}
-    70% {opacity: .7;}
-    100% {opacity: 1;}
   }
 
 </style>
