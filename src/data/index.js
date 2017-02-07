@@ -1,14 +1,13 @@
+let Vue = require('vue')
+let VueResource = require('vue-resource')
+Vue.use(VueResource)
+
 module.exports = {
-  wordBank: [
-    'antediluvian',
-    'xanthosis',
-    'chiaroscurist',
-    'logorrhea',
-    'succedaneum',
-    'pococurante',
-    'autochthonous',
-    'appoggiatura',
-    'ursprache',
-    'laodicean'
-  ]
+  word: 'set',
+  getRandomWord () {
+    Vue.http.jsonp('http://randomword.setgetgo.com/get.php').then(response => {
+      this.word = response.data.Word
+    })
+    return this.word
+  }
 }
