@@ -12,7 +12,8 @@
   "dependencies": {
     "speak-tts": "^1.0.2",
     "vue": "^2.1.0",
-    "vue-resource": "^1.1.0"
+    "vue-resource": "^1.1.0",
+    "vuex": "^2.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

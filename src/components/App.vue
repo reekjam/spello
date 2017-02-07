@@ -1,12 +1,13 @@
 <template>
   <div id='app'>
+
     <div v-if='gameOver'>
       <game-over v-bind:click-handler='newGame' class='game-over'/>
     </div>
-    <div v-else>
 
+    <div v-else>
       <form v-on:submit.prevent='compareWords'>
-        <h2>{{ setInstruction }}</h2>
+        <h2>{{ setInstruction() }}</h2>
 
         <div class='word-container' v-on:click.prevent='speak'>
           <p id='word'>{{ word }}</p>
@@ -16,7 +17,7 @@
           <p v-if='wrong'>Wrong.</p>
         </div>
 
-        <input type="text" v-model='entry'/>
+        <input type="text" @input='updateEntry'/>
         <button>Enter</button>
 
         <div class='strikes error'>
@@ -24,67 +25,54 @@
         </div>
       </form>
     </div>
+
   </div>
 </template>
 
 <script>
   import Speech from 'speak-tts'
-  import data from './data/index.js'
+  import { mapState, mapGetters, mapMutations } from 'vuex'
 
   const speechConfig = { lang: 'en-US', pitch: '1.1' }
   Speech.init(speechConfig)
 
   export default {
-    data () {
-      return {
-        word: 'ready',
-        index: 0,
-        entry: '',
-        playing: false,
-        wrong: false,
-        strikes: 0
-      }
-    },
     computed: {
-      gameOver () {
-        return this.strikes >= 3
-      },
+      ...mapState(['word', 'entry', 'playing', 'wrong', 'strikes']),
+      ...mapGetters(['gameOver'])
+    },
+    methods: {
+      ...mapMutations(['newGame', 'getRandomWord']),
       setInstruction () {
         if (this.playing) {
           return 'Spell, spell, spell.'
         } else {
           return 'Type "ready" to begin.'
         }
-      }
-    },
-    methods: {
+      },
+      updateEntry (e) {
+        this.$store.commit('updateEntry', e.target.value)
+      },
       getNewWord () {
-        this.word = data.getRandomWord()
-        this.resetReveal()
-        this.speak()
+        this.$store.dispatch('getRandomWord').then(() =>
+          this.speak()
+        )
       },
       compareWords () {
-        if (this.entry === this.word) {
-          this.playing = true
-          this.wrong = false
+        if (this.$store.state.entry === this.$store.state.word) {
+          this.$store.state.playing = true
+          this.$store.state.wrong = false
           this.getNewWord()
         } else {
-          this.wrong = true
-          this.strikes++
+          this.$store.state.wrong = true
+          this.$store.state.strikes++
         }
         this.clearInput()
       },
       clearInput () {
-        this.entry = ''
+        document.getElementsByTagName('input')[0].value = ''
       },
-      newGame () {
-        this.word = 'ready'
-        this.playing = false
-        this.wrong = false
-        this.strikes = 0
-        this.clearInput()
-      },
-      resetReveal () {
+      displayNewWord () {
         let wordSpan = document.querySelector('#word')
         let wordSpanClone = document.createElement('p')
         wordSpanClone.id = 'word'
@@ -93,7 +81,7 @@
         wordSpan.parentNode.replaceChild(wordSpanClone, wordSpan)
       },
       speak () {
-        Speech.speak({text: this.word})
+        Speech.speak({text: this.$store.state.word})
       }
     }
   }
@@ -106,6 +94,10 @@
     font-family: 'Noto Serif';
     background: skyblue;
     color: white;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
 
   input, button {
@@ -130,10 +122,10 @@
 
   #app {
     text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
   }
 
   #word {
