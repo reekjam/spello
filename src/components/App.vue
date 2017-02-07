@@ -22,9 +22,7 @@
         <input type="text" @input='updateEntry'/>
         <button>Enter</button>
 
-        <div class='strikes error'>
-          <span v-for='strike in strikes'> . </span>
-        </div>
+        <strikes :strikes='strikes' />
       </form>
     </div>
 
@@ -139,17 +137,6 @@
 
   .reveal-leave-to {
     opacity: 0;
-  }
-
-  .error {
-    height: 3em;
-    color: crimson;
-    overflow: hidden;
-  }
-
-  .strikes {
-    margin-top: 2em;
-    font-size: 1.5em;
   }
 
   @keyframes blinker {
