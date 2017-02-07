@@ -3,13 +3,15 @@
 import Vue from 'vue'
 import App from './components/App'
 import GameOver from './components/GameOver'
+import Instructions from './components/Instructions'
 import store from './store'
 Vue.component('game-over', GameOver)
+Vue.component('instructions', Instructions)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   store,
   template: '<App/>',
-  components: { App, GameOver }
+  components: { App, GameOver, Instructions }
 })

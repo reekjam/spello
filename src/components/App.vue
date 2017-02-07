@@ -7,7 +7,7 @@
 
     <div v-else>
       <form v-on:submit.prevent='compareWords'>
-        <h2>{{ setInstruction() }}</h2>
+        <instructions :playing='playing'/>
 
         <div class='word-container' v-on:click.prevent='speak'>
           <transition name='reveal' mode='out-in'>
@@ -45,13 +45,6 @@
     },
     methods: {
       ...mapMutations(['newGame', 'getRandomWord']),
-      setInstruction () {
-        if (this.playing) {
-          return 'Spell, spell, spell.'
-        } else {
-          return 'Type "ready" to begin.'
-        }
-      },
       updateEntry (e) {
         this.$store.commit('updateEntry', e.target.value)
       },
