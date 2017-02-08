@@ -2,7 +2,7 @@
   <div id='app'>
 
     <div v-if='gameOver'>
-      <game-over v-bind:click-handler='newGame' class='game-over'/>
+      <game-over v-bind:click-handler='newGame'/>
     </div>
 
     <div v-else>
