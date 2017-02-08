@@ -6,83 +6,37 @@
     </div>
 
     <div v-else>
-      <form v-on:submit.prevent='compareWords'>
-        <h2>{{ setInstruction() }}</h2>
-
-        <div class='word-container' v-on:click.prevent='speak'>
-          <p id='word'>{{ word }}</p>
-        </div>
-
-        <div class='error'>
-          <p v-if='wrong'>Wrong.</p>
-        </div>
-
-        <input type="text" @input='updateEntry'/>
-        <button>Enter</button>
-
-        <div class='strikes error'>
-          <span v-for='strike in strikes'> . </span>
-        </div>
-      </form>
+      <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word'/>
     </div>
 
   </div>
 </template>
 
 <script>
-  import Speech from 'speak-tts'
-  import { mapState, mapGetters, mapMutations } from 'vuex'
-
-  const speechConfig = { lang: 'en-US', pitch: '1.1' }
-  Speech.init(speechConfig)
+  import { mapState, mapGetters } from 'vuex'
+  import GameOver from './GameOver'
+  import GameForm from './GameForm'
 
   export default {
     computed: {
-      ...mapState(['word', 'entry', 'playing', 'wrong', 'strikes']),
-      ...mapGetters(['gameOver'])
+      ...mapState([
+        'word',
+        'entry',
+        'playing',
+        'wrong',
+        'strikes'
+      ]),
+      ...mapGetters([
+        'gameOver'
+      ])
     },
     methods: {
-      ...mapMutations(['newGame', 'getRandomWord']),
-      setInstruction () {
-        if (this.playing) {
-          return 'Spell, spell, spell.'
-        } else {
-          return 'Type "ready" to begin.'
-        }
-      },
-      updateEntry (e) {
-        this.$store.commit('updateEntry', e.target.value)
-      },
-      getNewWord () {
-        this.$store.dispatch('getRandomWord').then(() =>
-          this.speak()
-        )
-      },
-      compareWords () {
-        if (this.$store.state.entry === this.$store.state.word) {
-          this.$store.state.playing = true
-          this.$store.state.wrong = false
-          this.getNewWord()
-        } else {
-          this.$store.state.wrong = true
-          this.$store.state.strikes++
-        }
-        this.clearInput()
-      },
-      clearInput () {
-        document.getElementsByTagName('input')[0].value = ''
-      },
-      displayNewWord () {
-        let wordSpan = document.querySelector('#word')
-        let wordSpanClone = document.createElement('p')
-        wordSpanClone.id = 'word'
-        wordSpanClone.className = 'reveal'
-        wordSpanClone.innerHTML = this.word
-        wordSpan.parentNode.replaceChild(wordSpanClone, wordSpan)
-      },
-      speak () {
-        Speech.speak({text: this.$store.state.word})
+      newGame () {
+        this.$store.commit('newGame')
       }
+    },
+    components: {
+      GameOver, GameForm
     }
   }
 </script>
@@ -100,26 +54,6 @@
     justify-content: center;
   }
 
-  input, button {
-    font-size: 1em;
-    height: 2em;
-  }
-
-  input {
-    width: 20em;
-    padding: 0;
-    border: 0;
-  }
-
-  button {
-    border: 1px solid white;
-    background: transparent;
-    color: white;
-    margin-left: 1em;
-    padding: 0em 1em;
-    cursor: pointer;
-  }
-
   #app {
     text-align: center;
     display: flex;
@@ -127,37 +61,4 @@
     align-items: center;
     height: 100%;
   }
-
-  #word {
-    font-size: 2.5em;
-    margin-bottom: 0;
-  }
-
-  .word-container {
-    border-bottom: 1px solid white;
-    cursor: pointer;
-  }
-
-  .reveal {
-    animation: blinker 10s linear;
-  }
-
-  .error {
-    height: 3em;
-    color: crimson;
-    overflow: hidden;
-  }
-
-  .strikes {
-    margin-top: 2em;
-    font-size: 1.5em;
-  }
-
-  @keyframes blinker {
-    0% {opacity: 0;}
-    40% {opacity: .1;}
-    70% {opacity: .7;}
-    100% {opacity: 1;}
-  }
-
 </style>
