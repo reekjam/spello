@@ -18,6 +18,9 @@
 <script>
   import { mapMutations } from 'vuex'
   import Speech from 'speak-tts'
+  import Instructions from './Instructions'
+  import Word from './Word'
+  import Strikes from './Strikes'
 
   const speechConfig = { lang: 'en-US', pitch: '1.1' }
   Speech.init(speechConfig)
@@ -58,6 +61,9 @@
       speak () {
         Speech.speak({text: this.$store.state.word})
       }
+    },
+    components: {
+      Instructions, Word, Strikes
     }
   }
 </script>

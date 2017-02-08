@@ -14,6 +14,8 @@
 
 <script>
   import { mapState, mapGetters } from 'vuex'
+  import GameOver from './GameOver'
+  import GameForm from './GameForm'
 
   export default {
     computed: {
@@ -32,6 +34,9 @@
       newGame () {
         this.$store.commit('newGame')
       }
+    },
+    components: {
+      GameOver, GameForm
     }
   }
 </script>
