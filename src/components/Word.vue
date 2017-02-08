@@ -1,5 +1,5 @@
 <template>
-  <div class='word-container' v-on:click.prevent='speak'>
+  <div class='word-container' v-on:click.prevent='onClick'>
     <transition name='reveal' mode='out-in'>
       <p id='word' :key='word'>{{ word }}</p>
     </transition>
@@ -7,18 +7,8 @@
 </template>
 
 <script>
-  import Speech from 'speak-tts'
-
-  const speechConfig = { lang: 'en-US', pitch: '1.1' }
-  Speech.init(speechConfig)
-
   export default {
-    props: [ 'word' ],
-    methods: {
-      speak () {
-        Speech.speak({text: this.$store.state.word})
-      }
-    }
+    props: [ 'word', 'onClick' ]
   }
 </script>
 
