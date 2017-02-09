@@ -2,7 +2,7 @@
   <div id='app'>
 
     <div v-if='gameOver'>
-      <game-over v-bind:click-handler='newGame'/>
+      <game-over v-bind:click-handler='resetGame'/>
     </div>
 
     <div v-else>
@@ -31,8 +31,8 @@
       ])
     },
     methods: {
-      newGame () {
-        this.$store.commit('newGame')
+      resetGame () {
+        this.$store.commit('resetGame')
       }
     },
     components: {
@@ -61,4 +61,5 @@
     align-items: center;
     height: 100%;
   }
+
 </style>

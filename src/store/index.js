@@ -20,7 +20,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    newGame (state) {
+    resetGame (state) {
       state.word = 'ready'
       state.playing = false
       state.wrong = false
