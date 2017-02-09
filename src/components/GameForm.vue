@@ -1,18 +1,23 @@
 <template>
-  <form v-on:submit.prevent='compareWords'>
-    <instructions :playing='playing'/>
+  <div>
+    <stats :formatted-seconds='formattedSeconds'/>
 
-    <word :word='word' :on-click='speak'/>
+    <form v-on:submit.prevent='compareWords'>
 
-    <div class='error'>
-      <p v-if='wrong'>Wrong.</p>
-    </div>
+      <instructions :playing='playing'/>
 
-    <input type="text" v-on:input='updateEntry'/>
-    <button>Enter</button>
+      <word :word='word' :on-click='speak'/>
 
-    <strikes :strikes='strikes'/>
-  </form>
+      <div class='error'>
+        <p v-if='wrong'>Wrong.</p>
+      </div>
+
+      <input type="text" v-on:input='updateEntry'/>
+      <button>Enter</button>
+
+      <strikes :strikes='strikes'/>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -21,6 +26,7 @@
   import Instructions from './Instructions'
   import Word from './Word'
   import Strikes from './Strikes'
+  import Stats from './Stats'
 
   const speechConfig = { lang: 'en-US', pitch: '1.1' }
   Speech.init(speechConfig)
@@ -30,8 +36,16 @@
       'playing',
       'word',
       'wrong',
-      'strikes'
+      'strikes',
+      'elapsedSeconds'
     ],
+    computed: {
+      formattedSeconds () {
+        let minutes = Math.floor(this.elapsedSeconds / 60)
+        let seconds = ('0' + this.elapsedSeconds % 60).slice(-2)
+        return `${minutes}:${seconds}`
+      }
+    },
     methods: {
       ...mapMutations([
         'getRandomWord',
@@ -60,10 +74,19 @@
       },
       speak () {
         Speech.speak({text: this.$store.state.word})
+      },
+      updateElaspedSeconds () {
+        this.$store.commit('updateElapsedSeconds')
+      },
+      startTimer () {
+        setInterval(this.updateElaspedSeconds, 1000)
       }
     },
     components: {
-      Instructions, Word, Strikes
+      Instructions, Word, Strikes, Stats
+    },
+    mounted () {
+      this.startTimer()
     }
   }
 </script>

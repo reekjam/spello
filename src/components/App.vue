@@ -7,8 +7,7 @@
       </div>
 
       <div v-else>
-        <stats/>
-        <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word'/>
+        <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word' :elapsed-seconds='elapsedSeconds'/>
       </div>
 
     </div>
@@ -19,7 +18,6 @@
   import { mapState, mapGetters } from 'vuex'
   import GameOver from './GameOver'
   import GameForm from './GameForm'
-  import Stats from './Stats'
 
   export default {
     computed: {
@@ -28,7 +26,8 @@
         'entry',
         'playing',
         'wrong',
-        'strikes'
+        'strikes',
+        'elapsedSeconds'
       ]),
       ...mapGetters([
         'gameOver'
@@ -40,7 +39,7 @@
       }
     },
     components: {
-      GameOver, GameForm, Stats
+      GameOver, GameForm
     }
   }
 </script>

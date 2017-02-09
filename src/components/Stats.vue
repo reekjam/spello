@@ -2,7 +2,7 @@
   <div class='stats-container'>
     <div>
       <span>
-        Timer
+        {{ formattedSeconds }}
       </span>
     </div>
     <div>
@@ -14,6 +14,9 @@
 </template>
 
 <script>
+  export default {
+    props: [ 'formattedSeconds' ]
+  }
 </script>
 
 <style>

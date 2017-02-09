@@ -12,7 +12,8 @@ export default new Vuex.Store({
     entry: '',
     playing: false,
     wrong: false,
-    strikes: 0
+    strikes: 0,
+    elapsedSeconds: 0
   },
   getters: {
     gameOver (state) {
@@ -39,6 +40,13 @@ export default new Vuex.Store({
     },
     updateWord (state, newWord) {
       state.word = newWord
+    },
+    updateElapsedSeconds (state) {
+      if (state.playing) {
+        state.elapsedSeconds += 1
+      } else {
+        state.elapsedSeconds = 0
+      }
     }
   },
   actions: {
