@@ -1,14 +1,17 @@
 <template>
   <div id='app'>
+    <div class='main'>
 
-    <div v-if='gameOver'>
-      <game-over v-bind:click-handler='resetGame'/>
+      <div v-if='gameOver'>
+        <game-over v-bind:click-handler='resetGame'/>
+      </div>
+
+      <div v-else>
+        <stats/>
+        <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word'/>
+      </div>
+
     </div>
-
-    <div v-else>
-      <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word'/>
-    </div>
-
   </div>
 </template>
 
@@ -16,6 +19,7 @@
   import { mapState, mapGetters } from 'vuex'
   import GameOver from './GameOver'
   import GameForm from './GameForm'
+  import Stats from './Stats'
 
   export default {
     computed: {
@@ -36,7 +40,7 @@
       }
     },
     components: {
-      GameOver, GameForm
+      GameOver, GameForm, Stats
     }
   }
 </script>
@@ -62,4 +66,7 @@
     height: 100%;
   }
 
+  .main {
+    flex-direction: column;
+  }
 </style>
