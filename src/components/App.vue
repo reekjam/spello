@@ -3,7 +3,7 @@
     <div class='main'>
 
       <div v-if='gameOver'>
-        <game-over v-bind:click-handler='resetGame'/>
+        <game-over v-bind:click-handler='resetGame' :score='score' :formattedSeconds='formattedSeconds'/>
       </div>
 
       <div v-else>
@@ -28,10 +28,12 @@
         'wrong',
         'strikes',
         'elapsedSeconds',
-        'previousWord'
+        'previousWord',
+        'score'
       ]),
       ...mapGetters([
-        'gameOver'
+        'gameOver',
+        'formattedSeconds'
       ])
     },
     methods: {

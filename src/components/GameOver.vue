@@ -1,10 +1,24 @@
 <template>
-  <h1 v-on:click='clickHandler' class='game-over'>Game over. Try again?</h1>
+  <div>
+    <h1 v-on:click='clickHandler' class='game-over'>Game over. Try again?</h1>
+    <p>You spelled {{ formattedMessage }} correctly in {{ formattedSeconds }}.</p>
+  </div>
 </template>
 
 <script>
   export default {
-    props: [ 'clickHandler' ]
+    props: [ 'clickHandler', 'score', 'formattedSeconds' ],
+    computed: {
+      formattedMessage () {
+        const score = this.score
+
+        if (score > 1) {
+          return `${score} words`
+        } else {
+          return `${score} word`
+        }
+      }
+    }
   }
 </script>
 

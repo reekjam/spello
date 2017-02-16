@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
   import Speech from 'speak-tts'
   import Instructions from './Instructions'
   import Word from './Word'
@@ -41,11 +41,9 @@
       'previousWord'
     ],
     computed: {
-      formattedSeconds () {
-        let minutes = Math.floor(this.elapsedSeconds / 60)
-        let seconds = ('0' + this.elapsedSeconds % 60).slice(-2)
-        return `${minutes}:${seconds}`
-      }
+      ...mapGetters([
+        'formattedSeconds'
+      ])
     },
     methods: {
       ...mapMutations([
@@ -81,7 +79,7 @@
         this.$store.commit('updateElapsedSeconds')
       },
       startTimer () {
-        setInterval(this.updateElaspedSeconds, 1000)
+        this.updateElaspedSeconds()
       },
       setPreviousWord (word) {
         this.$store.commit('setPreviousWord', word)
@@ -91,7 +89,10 @@
       Instructions, Word, Strikes, Stats
     },
     mounted () {
-      this.startTimer()
+      this.timer = setInterval(this.startTimer, 1000)
+    },
+    beforeDestroy () {
+      clearInterval(this.timer)
     }
   }
 </script>

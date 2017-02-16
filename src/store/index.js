@@ -14,11 +14,17 @@ export default new Vuex.Store({
     wrong: false,
     strikes: 0,
     elapsedSeconds: 0,
-    previousWord: ''
+    previousWord: '',
+    score: 0
   },
   getters: {
     gameOver (state) {
       return state.strikes >= 3
+    },
+    formattedSeconds (state) {
+      let minutes = Math.floor(state.elapsedSeconds / 60)
+      let seconds = ('0' + state.elapsedSeconds % 60).slice(-2)
+      return `${minutes}:${seconds}`
     }
   },
   mutations: {
@@ -27,10 +33,13 @@ export default new Vuex.Store({
       state.playing = false
       state.wrong = false
       state.strikes = 0
+      state.previousWord = ''
+      state.score = 0
     },
     correctEntry (state) {
       state.playing = true
       state.wrong = false
+      state.score++
     },
     incorrectEntry (state) {
       state.wrong = true
