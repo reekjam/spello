@@ -7,7 +7,7 @@
       </div>
 
       <div v-else>
-        <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word' :elapsed-seconds='elapsedSeconds'/>
+        <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word' :elapsed-seconds='elapsedSeconds' :previous-word='previousWord'/>
       </div>
 
     </div>
@@ -27,7 +27,8 @@
         'playing',
         'wrong',
         'strikes',
-        'elapsedSeconds'
+        'elapsedSeconds',
+        'previousWord'
       ]),
       ...mapGetters([
         'gameOver'

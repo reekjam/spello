@@ -7,7 +7,7 @@
     </div>
     <div>
       <span>
-        Previous Word
+        {{ previousWord }}
       </span>
     </div>
   </div>
@@ -15,7 +15,7 @@
 
 <script>
   export default {
-    props: [ 'formattedSeconds' ]
+    props: [ 'formattedSeconds', 'previousWord' ]
   }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <stats :formatted-seconds='formattedSeconds'/>
+    <stats :formatted-seconds='formattedSeconds' :previous-word='previousWord'/>
 
     <form v-on:submit.prevent='compareWords'>
 
@@ -37,7 +37,8 @@
       'word',
       'wrong',
       'strikes',
-      'elapsedSeconds'
+      'elapsedSeconds',
+      'previousWord'
     ],
     computed: {
       formattedSeconds () {
@@ -56,6 +57,7 @@
         if (this.$store.state.entry === this.$store.state.word) {
           this.correctEntry()
           this.getNewWord()
+          this.setPreviousWord(this.$store.state.entry)
         } else {
           this.incorrectEntry()
         }
@@ -80,6 +82,9 @@
       },
       startTimer () {
         setInterval(this.updateElaspedSeconds, 1000)
+      },
+      setPreviousWord (word) {
+        this.$store.commit('setPreviousWord', word)
       }
     },
     components: {

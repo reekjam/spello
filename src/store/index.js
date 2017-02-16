@@ -13,7 +13,8 @@ export default new Vuex.Store({
     playing: false,
     wrong: false,
     strikes: 0,
-    elapsedSeconds: 0
+    elapsedSeconds: 0,
+    previousWord: ''
   },
   getters: {
     gameOver (state) {
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     incorrectEntry (state) {
       state.wrong = true
       state.strikes++
+    },
+    setPreviousWord (state, word) {
+      state.previousWord = word
     },
     updateEntry (state, entry) {
       state.entry = entry
