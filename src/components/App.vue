@@ -1,14 +1,16 @@
 <template>
   <div id='app'>
+    <div class='main'>
 
-    <div v-if='gameOver'>
-      <game-over v-bind:click-handler='newGame'/>
+      <div v-if='gameOver'>
+        <game-over v-bind:click-handler='resetGame' :score='score' :formattedSeconds='formattedSeconds'/>
+      </div>
+
+      <div v-else>
+        <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word' :elapsed-seconds='elapsedSeconds' :previous-word='previousWord'/>
+      </div>
+
     </div>
-
-    <div v-else>
-      <game-form :playing='playing' :wrong='wrong' :strikes='strikes' :word='word'/>
-    </div>
-
   </div>
 </template>
 
@@ -24,15 +26,19 @@
         'entry',
         'playing',
         'wrong',
-        'strikes'
+        'strikes',
+        'elapsedSeconds',
+        'previousWord',
+        'score'
       ]),
       ...mapGetters([
-        'gameOver'
+        'gameOver',
+        'formattedSeconds'
       ])
     },
     methods: {
-      newGame () {
-        this.$store.commit('newGame')
+      resetGame () {
+        this.$store.commit('resetGame')
       }
     },
     components: {
@@ -60,5 +66,9 @@
     flex-direction: row;
     align-items: center;
     height: 100%;
+  }
+
+  .main {
+    flex-direction: column;
   }
 </style>

@@ -1,26 +1,32 @@
 <template>
-  <form v-on:submit.prevent='compareWords'>
-    <instructions :playing='playing'/>
+  <div>
+    <stats :formatted-seconds='formattedSeconds' :previous-word='previousWord'/>
 
-    <word :word='word' :on-click='speak'/>
+    <form v-on:submit.prevent='compareWords'>
 
-    <div class='error'>
-      <p v-if='wrong'>Wrong.</p>
-    </div>
+      <instructions :playing='playing'/>
 
-    <input type="text" v-on:input='updateEntry'/>
-    <button>Enter</button>
+      <word :word='word' :on-click='speak'/>
 
-    <strikes :strikes='strikes'/>
-  </form>
+      <div class='error'>
+        <p v-if='wrong'>Wrong.</p>
+      </div>
+
+      <input type="text" v-on:input='updateEntry'/>
+      <button>Enter</button>
+
+      <strikes :strikes='strikes'/>
+    </form>
+  </div>
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
   import Speech from 'speak-tts'
   import Instructions from './Instructions'
   import Word from './Word'
   import Strikes from './Strikes'
+  import Stats from './Stats'
 
   const speechConfig = { lang: 'en-US', pitch: '1.1' }
   Speech.init(speechConfig)
@@ -30,8 +36,15 @@
       'playing',
       'word',
       'wrong',
-      'strikes'
+      'strikes',
+      'elapsedSeconds',
+      'previousWord'
     ],
+    computed: {
+      ...mapGetters([
+        'formattedSeconds'
+      ])
+    },
     methods: {
       ...mapMutations([
         'getRandomWord',
@@ -42,6 +55,7 @@
         if (this.$store.state.entry === this.$store.state.word) {
           this.correctEntry()
           this.getNewWord()
+          this.setPreviousWord(this.$store.state.entry)
         } else {
           this.incorrectEntry()
         }
@@ -60,10 +74,25 @@
       },
       speak () {
         Speech.speak({text: this.$store.state.word})
+      },
+      updateElaspedSeconds () {
+        this.$store.commit('updateElapsedSeconds')
+      },
+      startTimer () {
+        this.updateElaspedSeconds()
+      },
+      setPreviousWord (word) {
+        this.$store.commit('setPreviousWord', word)
       }
     },
     components: {
-      Instructions, Word, Strikes
+      Instructions, Word, Strikes, Stats
+    },
+    mounted () {
+      this.timer = setInterval(this.startTimer, 1000)
+    },
+    beforeDestroy () {
+      clearInterval(this.timer)
     }
   }
 </script>
