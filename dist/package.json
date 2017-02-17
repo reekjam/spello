@@ -1,0 +1,10 @@
+{
+  "name": "spello",
+  "version": "1.0.0",
+  "description": "Vue.js SPA spelling party",
+  "author": "Rick Rieta",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install express"
+  }
+}
