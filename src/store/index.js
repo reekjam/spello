@@ -8,14 +8,25 @@ Vue.use(VueResource)
 export default new Vuex.Store({
   state: {
     word: 'ready',
-    index: 0,
     entry: '',
     playing: false,
     wrong: false,
     strikes: 0,
     elapsedSeconds: 0,
     previousWord: '',
-    score: 0
+    score: 0,
+    wordBank: [
+      'antediluvian',
+      'xanthosis',
+      'chiaroscurist',
+      'logorrhea',
+      'succedaneum',
+      'pococurante',
+      'autochthonous',
+      'appoggiatura',
+      'ursprache',
+      'laodicean'
+    ]
   },
   getters: {
     gameOver (state) {
@@ -64,8 +75,12 @@ export default new Vuex.Store({
   },
   actions: {
     getRandomWord (context) {
-      return Vue.http.jsonp('http://randomword.setgetgo.com/get.php').then(response => {
+      return Vue.http.jsonp('http://setgetgo.com/randomword/get.php')
+      .then(response => {
         context.commit('updateWord', response.data.Word)
+      })
+      .catch(() => {
+        context.commit('updateWord', context.state.wordBank[Math.floor(Math.random() * context.state.wordBank.length)])
       })
     }
   }
