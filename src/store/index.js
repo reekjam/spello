@@ -75,9 +75,8 @@ export default new Vuex.Store({
   },
   actions: {
     getRandomWord (context) {
-      return Vue.http.jsonp('http://setgetgo.com/randomword/get.php')
-      .then(response => {
-        context.commit('updateWord', response.data.Word)
+      return Vue.http.jsonp('https://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5').then(response => {
+        context.commit('updateWord', response.data[0].word)
       })
       .catch(() => {
         context.commit('updateWord', context.state.wordBank[Math.floor(Math.random() * context.state.wordBank.length)])
